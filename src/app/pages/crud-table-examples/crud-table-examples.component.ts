@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import * as Entity from "../../shared/entities";
-import {TableData} from "../../shared/table-data";
-import * as MockData from "../../shared/mock-data";
+import {TableData} from "../../components/crud-table/table-data";
+import * as MockData from "./mock-data";
+import {Artist, Product} from "./example-entities";
 
 @Component({
   selector: 'app-crud-table-examples',
@@ -9,8 +9,8 @@ import * as MockData from "../../shared/mock-data";
   styleUrls: ['./crud-table-examples.component.css']
 })
 export class CrudTableExamplesComponent implements OnInit {
-  artists: TableData<Entity.Artist> = MockData.ArtistTableData;
-  products: TableData<Entity.Product> = MockData.ProductTableData;
+  artists: TableData<Artist> = MockData.ArtistTableData;
+  products: TableData<Product> = MockData.ProductTableData;
 
   constructor() { }
 

@@ -1,2 +1,11 @@
-<app-crud-table [items]="artists.items" [columns]="artists.columns" [displayedColumns]="artists.displayed_columns"></app-crud-table>
-<app-crud-table [items]="products.items" [columns]="products.columns" [displayedColumns]="products.displayed_columns"></app-crud-table>
+<app-crud-table
+  [items]="artists.items"
+  [columns]="artists.columns"
+></app-crud-table>
+<app-crud-table
+  [items]="products.items"
+  [columns]="products.columns"
+  headerColor="#7a5587"
+  headerTextColor="#ffffff"
+  formFieldColor="warn"
+></app-crud-table>

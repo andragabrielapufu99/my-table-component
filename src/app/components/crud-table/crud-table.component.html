@@ -1,26 +1,39 @@
-<form class="filter-form">
-  <mat-form-field>
-    <input matInput [(ngModel)]="filter" name="filter" (ngModelChange)="applyFilter()" placeholder="Filter" />
-  </mat-form-field>
-</form>
-<table mat-table [dataSource]="tableData" matSort (matSortChange)="sortData($event)" class="mat-elevation-z8">
-  <ng-container *ngFor="let col of columns" matColumnDef="{{col.key}}">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header="{{col.key}}">{{col.name}}</th>
-    <td mat-cell *matCellDef="let item">{{item.fields[col.key]}}</td>
-  </ng-container>
-  <ng-container matColumnDef="edit">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let item">
-      <button mat-icon-button (click)="editItem(item)"><mat-icon aria-hidden="false">edit</mat-icon></button>
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="delete">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let item">
-      <button mat-icon-button (click)="deleteItem(item.id)"><mat-icon aria-hidden="false">delete</mat-icon></button>
-    </td>
-  </ng-container>
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-<button mat-icon-button (click)="addItem()"><mat-icon aria-hidden="false">add</mat-icon></button>
+<div class="container">
+  <form class="filter-form">
+    <mat-form-field class="searchForm" [color]="formFieldColor">
+      <input matInput [(ngModel)]="filter" name="filter" (ngModelChange)="applyFilter()" placeholder="Filter" />
+    </mat-form-field>
+  </form>
+  <table mat-table [dataSource]="tableData" matSort (matSortChange)="sortData($event)" class="mat-elevation-z8 tableContainer">
+    <ng-container *ngFor="let col of columns" matColumnDef="{{col.key}}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="{{col.key}}" [ngStyle]="{'background': headerColor, 'color': headerTextColor}"><b>{{col.name}}</b></th>
+      <td mat-cell *matCellDef="let item">
+        <textarea cdkTextareaAutosize *ngIf="item.id! !== -1 && !editing[item.id]" matInput value="{{item.fields[col.key]}}" placeholder="{{col.name}}" readonly></textarea>
+        <textarea cdkTextareaAutosize *ngIf="item.id! !== -1 && editing[item.id]" matInput [(ngModel)]="item.fields[col.key]" name="edit_{{item.id}}_{{col.key}}" placeholder="{{col.name}}"></textarea>
+        <textarea cdkTextareaAutosize *ngIf="item.id === -1" matInput [(ngModel)]="item.fields[col.key]" name="add_{{item.id}}_{{col.key}}" placeholder="{{col.name}}"></textarea>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef [ngStyle]="{'background': headerColor}"></th>
+      <td mat-cell *matCellDef="let item">
+        <button *ngIf="item.id !== -1 && !editing[item.id]" mat-icon-button (click)="editItem(item)"><mat-icon aria-hidden="false">edit</mat-icon></button>
+        <button *ngIf="item.id !== -1 && editing[item.id]" mat-icon-button (click)="saveEditItem(item)"><mat-icon aria-hidden="false">done</mat-icon></button>
+        <button *ngIf="item.id === -1" mat-icon-button (click)="saveAddItem(item)"><mat-icon aria-hidden="false">save</mat-icon></button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef [ngStyle]="{'background': headerColor}"></th>
+      <td mat-cell *matCellDef="let item">
+        <button *ngIf="item.id !== -1 && !editing[item.id]" mat-icon-button (click)="deleteItem(item)"><mat-icon aria-hidden="false">delete</mat-icon></button>
+        <button *ngIf="item.id !== -1 && editing[item.id]" mat-icon-button (click)="cancelEditItem(item)"><mat-icon aria-hidden="false">close</mat-icon></button>
+        <button *ngIf="item.id === -1" mat-icon-button (click)="cancelAddItem()"><mat-icon aria-hidden="false">close</mat-icon></button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div class="flex-end">
+    <button mat-icon-button (click)="addItem()" [disabled]="adding" class="addButton"><mat-icon aria-hidden="false">add</mat-icon></button>
+  </div>
+</div>
+

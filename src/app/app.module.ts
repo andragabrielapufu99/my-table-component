@@ -20,18 +20,18 @@ import { CrudTableExamplesComponent } from './pages/crud-table-examples/crud-tab
     CrudTableComponent,
     CrudTableExamplesComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    MatTableModule,
-    MatSortModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        MatTableModule,
+        MatSortModule,
+        MatButtonModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
