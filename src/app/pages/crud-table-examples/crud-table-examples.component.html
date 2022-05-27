@@ -1,11 +1,2 @@
-<app-crud-table
-  [items]="artists.items"
-  [columns]="artists.columns"
-></app-crud-table>
-<app-crud-table
-  [items]="products.items"
-  [columns]="products.columns"
-  headerColor="#7a5587"
-  headerTextColor="#ffffff"
-  formFieldColor="warn"
-></app-crud-table>
+<app-crud-table #artistCrud [data]="artists"></app-crud-table>
+<app-crud-table #productCrud [data]="products" headerColor="#7a5587" headerTextColor="#ffffff" formFieldColor="warn"></app-crud-table>

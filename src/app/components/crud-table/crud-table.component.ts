@@ -1,8 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { Field } from "./field";
 import { Item } from "./entities";
 import {Sort} from "@angular/material/sort";
 import {ThemePalette} from "@angular/material/core";
+import {TableData} from "./table-data";
+
+export interface Message {
+  type: string;
+  item: Item;
+}
 
 @Component({
   selector: 'app-crud-table',
@@ -10,13 +16,14 @@ import {ThemePalette} from "@angular/material/core";
   styleUrls: ['./crud-table.component.css']
 })
 export class CrudTableComponent implements OnInit {
-  @Input()
   items: Array<Item> = [];
 
-  @Input()
   columns: Array<Field> = [];
 
   displayedColumns: Array<string> = [];
+
+  @Input()
+  data: TableData<any> = {items: [], columns: []};
 
   @Input()
   headerColor: string = '#00BFFFFF';
@@ -35,9 +42,14 @@ export class CrudTableComponent implements OnInit {
 
   adding: boolean = false;
 
+  @Output()
+  change = new EventEmitter<Message>();
+
   constructor() {}
 
   ngOnInit(): void {
+    this.items = this.data.items;
+    this.columns = this.data.columns;
     this.columns.map((col) => this.displayedColumns.push(col.key));
     this.items.map((item) => {this.editing[item.id] = false;});
     this.tableData = this.items;
@@ -70,6 +82,7 @@ export class CrudTableComponent implements OnInit {
     this.editing[item.id] = false;
     this.tableData = this.items;
     this.adding = false;
+    this.change.emit({type: 'add', item: item});
   }
 
   cancelAddItem() {
@@ -86,6 +99,7 @@ export class CrudTableComponent implements OnInit {
   saveEditItem(item: Item) {
     this.editing[item.id] = false;
     this.items.map((i) => {if(i.id === item.id) i = item;});
+    this.change.emit({type: 'update', item: item});
   }
 
   cancelEditItem(item: Item) {
@@ -95,6 +109,7 @@ export class CrudTableComponent implements OnInit {
   deleteItem(item: Item) {
     this.items = this.items.filter(i => i.id !== item.id);
     this.tableData = this.items;
+    this.change.emit({type: 'delete', item: item});
   }
 
   applyFilter() {
